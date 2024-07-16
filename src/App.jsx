@@ -20,7 +20,7 @@ const App = () => {
         camera={{ position: [20, 20, 20], fov: 50 }}
         className="flex-grow"
       />
-      <div className="absolute bottom-0 inset-x-0 flex justify-center p-6 bg-white shadow-lg">
+      <div className="absolute bottom-0 inset-x-0 flex justify-start p-6 bg-white shadow-lg">
         <input
           type="text"
           placeholder="Enter starting cell"
