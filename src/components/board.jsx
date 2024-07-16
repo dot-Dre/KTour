@@ -16,7 +16,7 @@ const Board = () => {
         row * CanvasProps.squareSize + CanvasProps.boardOrigin.z,
       ];
       squares.push(
-        <mesh key={`${row}-${col}`} position={position}>
+        <mesh key={`${row}-${col}`} position={position} receiveShadow>
           <boxGeometry args={[CanvasProps.squareSize, 1, CanvasProps.squareSize]} />
           <meshStandardMaterial color={color} metalness={0.7} roughness={0.2} />
         </mesh>

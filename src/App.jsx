@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import Typewriter from "typewriter-effect";
 import Board from "./components/board";
+import Piece from "./components/piece";
 
 const App = () => {
   return (
@@ -24,8 +25,9 @@ const App = () => {
       >
         <OrbitControls />
         <ambientLight intensity={0.5} />
-        <directionalLight position={[10, 10, 40]} intensity={10} />
+        <directionalLight castShadow position={[10, 10, 40]} intensity={10} />
         <Board />
+        <Piece position={[0, 3]} onReached={() => {}}/>
       </Canvas>
       <div className="absolute bottom-0 inset-x-0 flex justify-start p-6 bg-transparent shadow-lg">
         <input
