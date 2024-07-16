@@ -1,6 +1,8 @@
 import * as React from "react";
 import { Canvas } from "@react-three/fiber";
+import { AmbientLight, DirectionalLight } from "three";
 import Typewriter from "typewriter-effect";
+import Board from "./components/board";
 
 const App = () => {
   return (
@@ -19,7 +21,11 @@ const App = () => {
       <Canvas
         camera={{ position: [20, 20, 20], fov: 50 }}
         className="flex-grow"
-      />
+      >
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[10, 10, 40]} intensity={10} />
+        <Board />
+      </Canvas>
       <div className="absolute bottom-0 inset-x-0 flex justify-start p-6 bg-white shadow-lg">
         <input
           type="text"
