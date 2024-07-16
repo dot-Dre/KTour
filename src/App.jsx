@@ -27,7 +27,7 @@ const App = () => {
         <directionalLight position={[10, 10, 40]} intensity={10} />
         <Board />
       </Canvas>
-      <div className="absolute bottom-0 inset-x-0 flex justify-start p-6 bg-white shadow-lg">
+      <div className="absolute bottom-0 inset-x-0 flex justify-start p-6 bg-transparent shadow-lg">
         <input
           type="text"
           placeholder="Enter starting cell"
