@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from '@react-three/drei';
 import CellOverlay from './cellOverlay';
 
 const squareSize = 2;
@@ -9,6 +10,13 @@ const Board = ({ visitedPositions, currentIndex }) => {
   const cols = 8;
   const squares = [];
   const overlays = [];
+  const labels = [];
+
+  const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+  const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'];
+
+  files.reverse();
+  ranks.reverse();
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
@@ -37,6 +45,40 @@ const Board = ({ visitedPositions, currentIndex }) => {
           />
         );
       }
+
+      if (row === 7) {
+        labels.push(
+          <Text
+            key={`file-${col}`}
+            position={[position[0], 0, position[2] + squareSize / 2 + 0.5]}
+            rotation={[-Math.PI / 2, 0, 0]}
+            color="black"
+            fontWeight={1}
+            fontSize={0.8}
+            anchorX="center"
+            anchorY="middle"
+          >
+            {files[col]}
+          </Text>
+        );
+      }
+
+      if (col === 0) {
+        labels.push(
+          <Text
+            key={`rank-${row}`}
+            position={[position[0] - squareSize / 2 - 0.5, 0, position[2]]}
+            rotation={[-Math.PI / 2, 0, 0]}
+            color="black"
+            fontWeight={1}
+            fontSize={0.8}
+            anchorX="center"
+            anchorY="middle"
+          >
+            {ranks[row]}
+          </Text>
+        );
+      }
     }
   }
 
@@ -44,6 +86,7 @@ const Board = ({ visitedPositions, currentIndex }) => {
     <>
       {squares}
       {overlays}
+      {labels}
     </>
   );
 };
