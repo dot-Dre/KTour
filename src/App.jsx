@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Canvas } from "@react-three/fiber";
-import { AmbientLight, DirectionalLight } from "three";
+import { OrbitControls } from "@react-three/drei";
 import Typewriter from "typewriter-effect";
 import Board from "./components/board";
 
@@ -22,6 +22,7 @@ const App = () => {
         camera={{ position: [20, 20, 20], fov: 50 }}
         className="flex-grow"
       >
+        <OrbitControls />
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 40]} intensity={10} />
         <Board />
