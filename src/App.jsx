@@ -6,6 +6,7 @@ import Typewriter from "typewriter-effect";
 import Board from "./components/board";
 import Piece from "./components/piece";
 import KnightTourSolver from "./solver/solver";
+import CellOverlay from "./components/cellOverlay";
 
 const App = () => {
   const [positions, setPositions] = useState([]);
@@ -82,7 +83,8 @@ const App = () => {
         <OrbitControls />
         <ambientLight intensity={0.5} />
         <directionalLight castShadow position={[10, 10, 40]} intensity={10} />
-        <Board visitedPositions={visitedPositions} />
+        <Board visitedPositions={visitedPositions} currentIndex={currentIndex} />
+        <CellOverlay position={nextPosition} moveNumber={currentIndex}/>
         <Piece position={nextPosition} onReached={handlePositionReached} />
       </Canvas>
       <div className="absolute bottom-0 inset-x-0 flex justify-start p-6 bg-transparent shadow-lg">
