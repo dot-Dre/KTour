@@ -13,8 +13,12 @@ const App = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextPosition, setNextPosition] = useState([4, 1]);
   const [startAnimation, setStartAnimation] = useState(false);
-  const [startingCell, setStartingCell] = useState('');
+  const [startingCell, setStartingCell] = useState("");
   const [visitedPositions, setVisitedPositions] = useState([]);
+
+  const sleep = (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
   const handleSolve = () => {
     const solver = new KnightTourSolver();
@@ -26,7 +30,7 @@ const App = () => {
     const file = startingCell[0].toLowerCase();
     const rank = startingCell[1];
 
-    if (!'abcdefgh'.includes(file) || !'12345678'.includes(rank)) {
+    if (!"abcdefgh".includes(file) || !"12345678".includes(rank)) {
       alert('Invalid cell. Please use format like "a1", "h8", etc.');
       return;
     }
@@ -34,9 +38,9 @@ const App = () => {
     const [row, col] = solver.positionMapper.getPositionFromCell(file, rank);
     const boardSolution = solver.solve(row, col);
     const moves = solver.getTourMoves(boardSolution);
-    
-    const tour = moves.map(move => {
-      const [file, rank] = move.split('');
+
+    const tour = moves.map((move) => {
+      const [file, rank] = move.split("");
       return solver.positionMapper.getPositionFromCell(file, rank);
     });
 
@@ -58,14 +62,29 @@ const App = () => {
     setCurrentIndex(0);
   };
 
-  const handlePositionReached = (newPosition) => {
+  const handlePositionReached = async (newPosition) => {
     setCurrentIndex((prev) => prev + 1);
     setVisitedPositions((prev) => [...prev, newPosition]);
+    sleep(500)
   };
 
   return (
-    <section className="home-sec w-full h-screen flex flex-col justify-between">
-      <div className="text-8xl pt-8 pl-6 font-bold text-black">
+    <section className="home-sec bg-transparent w-full h-screen flex flex-col justify-between">
+      <Canvas
+        camera={{ position: [20, 20, 20], fov: 50 }}
+        className="flex-grow"
+      >
+        <OrbitControls />
+        <ambientLight intensity={0.5} />
+        <directionalLight castShadow position={[10, 10, 40]} intensity={10} />
+        <Board
+          visitedPositions={visitedPositions}
+          currentIndex={currentIndex}
+        />
+        <CellOverlay position={nextPosition} moveNumber={currentIndex} />
+        <Piece position={nextPosition} onReached={handlePositionReached} />
+      </Canvas>
+      <div className="absolute top-0 inset-x-0 flex justify-start text-8xl pt-8 pl-6 font-bold text-black bg-transparent">
         <Typewriter
           onInit={(typewriter) => {
             typewriter
@@ -76,17 +95,6 @@ const App = () => {
           }}
         />
       </div>
-      <Canvas
-        camera={{ position: [20, 20, 20], fov: 50 }}
-        className="flex-grow"
-      >
-        <OrbitControls />
-        <ambientLight intensity={0.5} />
-        <directionalLight castShadow position={[10, 10, 40]} intensity={10} />
-        <Board visitedPositions={visitedPositions} currentIndex={currentIndex} />
-        <CellOverlay position={nextPosition} moveNumber={currentIndex}/>
-        <Piece position={nextPosition} onReached={handlePositionReached} />
-      </Canvas>
       <div className="absolute bottom-0 inset-x-0 flex justify-start p-6 bg-transparent shadow-lg">
         <input
           type="text"
