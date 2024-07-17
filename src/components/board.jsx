@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text } from '@react-three/drei';
 import CellOverlay from './cellOverlay';
+import CanvasProps from '../canvasProps';
 
 const squareSize = 2;
 const boardOrigin = { x: -7, z: -7 };
@@ -20,7 +21,7 @@ const Board = ({ visitedPositions, currentIndex }) => {
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-      const color = (row + col) % 2 === 0 ? 0xffffff : 0x808080;
+      const color = (row + col) % 2 === 0 ? CanvasProps.boardColorOne : CanvasProps.boardColorTwo;
       const position = [
         col * squareSize + boardOrigin.x,
         0,
