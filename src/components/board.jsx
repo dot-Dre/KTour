@@ -29,7 +29,10 @@ const Board = ({ visitedPositions, currentIndex }) => {
       squares.push(
         <mesh key={`${row}-${col}`} position={position}>
           <boxGeometry args={[squareSize, 1, squareSize]} />
-          <meshStandardMaterial color={color} metalness={0.7} roughness={0.2} />
+          {/* <meshStandardMaterial color={color} metalness={0.0} roughness={1} />
+           */}
+           {/* <meshPhongMaterial color={color}/> */}
+           <meshToonMaterial color={color}/>
         </mesh>
       );
 
