@@ -4,6 +4,7 @@ const CanvasProps = {
   animationSpeed: 0.101,
   boardColorOne:0xffffff,
   boardColorTwo:0x808080,
+  lightColor:0xe0faff,
   overlayColor:"#03fc90",
 };
 

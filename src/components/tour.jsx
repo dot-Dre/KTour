@@ -7,6 +7,7 @@ import KnightTourSolver from "../solver/solver";
 import CellOverlay from "./cellOverlay";
 import Piece from "./piece";
 import mapBoardPositionTo3D from "../util/helper";
+import CanvasProps from "../canvasProps";
 
 const Tour = () => {
   const [positions, setPositions] = useState([]);
@@ -68,7 +69,7 @@ const Tour = () => {
       >
         <OrbitControls />
         <ambientLight intensity={0.5} />
-        <directionalLight castShadow position={[10, 10, 40]} intensity={2} />
+        <directionalLight castShadow position={[10, 10, 40]} intensity={2} color={CanvasProps.lightColor}/>
         <Board
           visitedPositions={visitedPositions}
           currentIndex={currentIndex}
@@ -97,7 +98,7 @@ const Tour = () => {
         </button>
         <button
           onClick={handleStep}
-          className="py-2 px-4 bg-green-500 text-white rounded-r hover:bg-green-600 focus:outline-none ml-2"
+          className="py-2 px-4 bg-purple-800 text-white rounded-r hover:bg-green-600 focus:outline-none ml-2"
           disabled={!tourCalculated}
         >
           Next Step
