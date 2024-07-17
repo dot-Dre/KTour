@@ -69,7 +69,7 @@ const App = () => {
       >
         <OrbitControls />
         <ambientLight intensity={0.5} />
-        <directionalLight castShadow position={[10, 10, 40]} intensity={10} />
+        <directionalLight castShadow position={[10, 10, 40]} intensity={2} />
         <Board
           visitedPositions={visitedPositions}
           currentIndex={currentIndex}
@@ -95,12 +95,12 @@ const App = () => {
           className="py-2 px-4 border border-gray-300 rounded-l focus:outline-none"
           value={startingCell}
           onChange={(e) => setStartingCell(e.target.value)}
-          disabled={isSolving || tourCalculated}
+          // disabled={isSolving || tourCalculated}
         />
         <button
           onClick={calculateTour}
           className="py-2 px-4 bg-blue-500 text-white rounded-r hover:bg-blue-600 focus:outline-none"
-          disabled={isSolving || tourCalculated}
+          // disabled={isSolving || tourCalculated}
         >
           {isSolving ? "Calculating..." : "Solve Tour"}
         </button>
