@@ -107,9 +107,6 @@ const Tour = () => {
           className="py-2 px-4 border border-gray-300 rounded-l focus:outline-none"
           value={startingCell}
           onChange={(e) => {
-            if (tourCalculated) {
-              reset();
-            } 
             setStartingCell(e.target.value);
           }}
           // disabled={isSolving || tourCalculated}
