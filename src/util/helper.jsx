@@ -3,7 +3,7 @@ const mapBoardPositionTo3D = ([row, col]) => {
     const boardOrigin = { x: -7, z: -7 }; 
     const x = col * size + boardOrigin.x;
     const z = row * size + boardOrigin.z;
-    const y = 1; 
+    const y = 29.4; 
     return [x, y, z];
 };
 
