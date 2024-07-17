@@ -1,71 +1,64 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import Typewriter from "typewriter-effect";
 import Board from "./components/board";
-import Piece from "./components/piece";
 import KnightTourSolver from "./solver/solver";
 import CellOverlay from "./components/cellOverlay";
+import Piece from "./components/piece";
+import mapBoardPositionTo3D from "./util/helper";
 
 const App = () => {
   const [positions, setPositions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [nextPosition, setNextPosition] = useState([4, 1]);
-  const [startAnimation, setStartAnimation] = useState(false);
+  const [nextPosition, setNextPosition] = useState([4, 1]); // Initializing with board coordinates
   const [startingCell, setStartingCell] = useState("");
   const [visitedPositions, setVisitedPositions] = useState([]);
+  const [tourCalculated, setTourCalculated] = useState(false);
+  const [isSolving, setIsSolving] = useState(false);
 
-  const sleep = (ms) => {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  const handleSolve = () => {
+  const calculateTour = () => {
+    setIsSolving(true);
     const solver = new KnightTourSolver();
     if (startingCell.length !== 2) {
       alert('Please enter a valid starting cell (e.g., "a1")');
+      setIsSolving(false);
       return;
     }
-
     const file = startingCell[0].toLowerCase();
     const rank = startingCell[1];
-
     if (!"abcdefgh".includes(file) || !"12345678".includes(rank)) {
       alert('Invalid cell. Please use format like "a1", "h8", etc.');
+      setIsSolving(false);
       return;
     }
-
     const [row, col] = solver.positionMapper.getPositionFromCell(file, rank);
     const boardSolution = solver.solve(row, col);
     const moves = solver.getTourMoves(boardSolution);
-
     const tour = moves.map((move) => {
       const [file, rank] = move.split("");
       return solver.positionMapper.getPositionFromCell(file, rank);
     });
-
     setPositions(tour);
-    setNextPosition(tour[0]);
+    setNextPosition(tour[0]); // Setting next position in board coordinates
     setCurrentIndex(0);
     setVisitedPositions([]);
+    setTourCalculated(true);
+    setIsSolving(false);
   };
 
-  useEffect(() => {
-    if (startAnimation && currentIndex < positions.length) {
-      setNextPosition(positions[currentIndex]);
+  const handleStep = () => {
+    if (currentIndex < positions.length - 1) {
+      const nextIndex = currentIndex + 1;
+      const nextPos = positions[nextIndex];
+      console.log("Next Position:", nextPos); // Debugging line
+      setCurrentIndex(nextIndex);
+      setNextPosition(nextPos); // Setting next position in board coordinates
+      setVisitedPositions(prev => [...prev, positions[currentIndex]]);
+    } else {
+      alert("Tour completed!");
     }
-  }, [currentIndex, startAnimation, positions]);
-
-  const handleAnimation = () => {
-    handleSolve();
-    setStartAnimation(true);
-    setCurrentIndex(0);
-  };
-
-  const handlePositionReached = async (newPosition) => {
-    setCurrentIndex((prev) => prev + 1);
-    setVisitedPositions((prev) => [...prev, newPosition]);
-    sleep(500)
   };
 
   return (
@@ -81,8 +74,8 @@ const App = () => {
           visitedPositions={visitedPositions}
           currentIndex={currentIndex}
         />
-        <CellOverlay position={nextPosition} moveNumber={currentIndex} />
-        <Piece position={nextPosition} onReached={handlePositionReached} />
+        <CellOverlay position={mapBoardPositionTo3D(nextPosition)} moveNumber={currentIndex} />
+        <Piece position={nextPosition}/>
       </Canvas>
       <div className="absolute top-0 inset-x-0 flex justify-start text-8xl pt-8 pl-6 font-bold text-black bg-transparent">
         <Typewriter
@@ -102,12 +95,21 @@ const App = () => {
           className="py-2 px-4 border border-gray-300 rounded-l focus:outline-none"
           value={startingCell}
           onChange={(e) => setStartingCell(e.target.value)}
+          disabled={isSolving || tourCalculated}
         />
         <button
-          onClick={handleAnimation}
+          onClick={calculateTour}
           className="py-2 px-4 bg-blue-500 text-white rounded-r hover:bg-blue-600 focus:outline-none"
+          disabled={isSolving || tourCalculated}
         >
-          Solve
+          {isSolving ? "Calculating..." : "Solve Tour"}
+        </button>
+        <button
+          onClick={handleStep}
+          className="py-2 px-4 bg-green-500 text-white rounded-r hover:bg-green-600 focus:outline-none ml-2"
+          disabled={!tourCalculated}
+        >
+          Next Step
         </button>
       </div>
     </section>

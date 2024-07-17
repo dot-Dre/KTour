@@ -1,43 +1,19 @@
-import * as React from "react";
-import { useRef, useState, useEffect } from "react";
-import { useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
-import CanvasProps from "../canvasProps";
-import gltfFile from "./chessknight.glb";
+import React from "react";
+import { useSpring, animated } from "@react-spring/three";
+import mapBoardPositionTo3D from "../util/helper";
 
-const Piece = ({ position, onReached }) => {
-  const ref = useRef();
-  const { nodes, materials } = useGLTF(gltfFile);
-  const [currentPos, setCurrentPos] = useState(position);
-
-  useEffect(() => {
-    setCurrentPos(position);
-  }, [position]);
-
-  useFrame(() => {
-    if (ref.current) {
-      const targetPosition = {
-        x: currentPos[1] * CanvasProps.squareSize + CanvasProps.boardOrigin.x,
-        y: 1,
-        z: currentPos[0] * CanvasProps.squareSize + CanvasProps.boardOrigin.z,
-      };
-      ref.current.position.lerp(targetPosition, CanvasProps.animationSpeed);
-      const distance = ref.current.position.distanceTo(targetPosition);
-      if (distance < 0.1) {
-        onReached(currentPos);
-      }
-    }
+const Piece = ({ position }) => {
+  const mappedPosition = mapBoardPositionTo3D(position);
+  const { position: animatedPosition } = useSpring({
+    to: { position: mappedPosition },
+    config: { mass: 1, tension: 180, friction: 12 }
   });
 
   return (
-    <mesh
-      ref={ref}
-      castShadow
-      receiveShadow
-      rotation={[-Math.PI / 2, 0, 0]}
-      geometry={nodes.Cylinder__0.geometry}
-      material={materials["Scene_-_Root"]}
-    />
+    <animated.mesh position={animatedPosition}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color="gold" />
+    </animated.mesh>
   );
 };
 
