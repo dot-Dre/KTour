@@ -108,9 +108,9 @@ const Tour = () => {
           value={startingCell}
           onChange={(e) => {
             if (tourCalculated) {
-              setStartingCell(e.target.value);
               reset();
             } 
+            setStartingCell(e.target.value);
           }}
           // disabled={isSolving || tourCalculated}
         />
