@@ -18,6 +18,21 @@ const Tour = () => {
   const [tourCalculated, setTourCalculated] = useState(false);
   const [isSolving, setIsSolving] = useState(false);
 
+  const buttonClass = `py-2 px-4 ${
+    tourCalculated ? "bg-purple-800" : "bg-gray-600"
+  } text-white rounded-r ${
+    tourCalculated ? "hover:bg-green" : "hover:bg-gray"
+  } focus:outline-none ml-2`;
+
+  const reset = () => {
+    setPositions(tour);
+    setNextPosition(tour[0]); // Setting next position in board coordinates
+    setCurrentIndex(0);
+    setVisitedPositions([]);
+    setTourCalculated(true);
+    setIsSolving(false);
+  }
+
   const calculateTour = () => {
     setIsSolving(true);
     const solver = new KnightTourSolver();
@@ -69,7 +84,12 @@ const Tour = () => {
       >
         <OrbitControls />
         <ambientLight intensity={0.5} />
-        <directionalLight castShadow position={[10, 10, 40]} intensity={2} color={CanvasProps.lightColor}/>
+        <directionalLight
+          castShadow
+          position={[10, 10, 40]}
+          intensity={2}
+          color={CanvasProps.lightColor}
+        />
         <Board
           visitedPositions={visitedPositions}
           currentIndex={currentIndex}
@@ -86,7 +106,12 @@ const Tour = () => {
           placeholder="Enter starting cell"
           className="py-2 px-4 border border-gray-300 rounded-l focus:outline-none"
           value={startingCell}
-          onChange={(e) => setStartingCell(e.target.value)}
+          onChange={(e) => {
+            if (tourCalculated) {
+              setStartingCell(e.target.value);
+              reset();
+            } 
+          }}
           // disabled={isSolving || tourCalculated}
         />
         <button
@@ -98,7 +123,7 @@ const Tour = () => {
         </button>
         <button
           onClick={handleStep}
-          className="py-2 px-4 bg-purple-800 text-white rounded-r hover:bg-green-600 focus:outline-none ml-2"
+          className={buttonClass}
           disabled={!tourCalculated}
         >
           Next Step
